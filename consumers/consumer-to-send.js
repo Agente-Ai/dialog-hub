@@ -9,7 +9,7 @@ const consumerToSend = ({ rabbitMQChannel, GRAPH_API_TOKEN, GRAPH_NUMBER_ID }) =
             try {
                 // Send message via WhatsApp API
                 const response = await axios.post(
-                    `https://graph.facebook.com/v22.0/${GRAPH_NUMBER_ID}/messages`,
+                    `https://graph.facebook.com/v22.0/${messageContent.phone_number_id}/messages`,
                     {
                         messaging_product: "whatsapp",
                         to: messageContent.from,
@@ -23,6 +23,9 @@ const consumerToSend = ({ rabbitMQChannel, GRAPH_API_TOKEN, GRAPH_NUMBER_ID }) =
                         },
                     }
                 );
+
+                console.log("Success send request message Meta:", response);
+
             } catch (error) {
                 console.error("Failed to send message:", error.response?.data || error.message);
             } finally {
