@@ -1,8 +1,14 @@
-export const createWebhookController = ({ }) => {
+export const createWebhookController = ({ publishToQueue }) => {
     const handleWebhookPost = async (req, res) => {
         const message = req.body.entry?.[0]?.changes[0]?.value?.messages?.[0];
 
-        console.log(message);
+        if (message?.type === "text") {
+            try {
+                publishToQueue(req.body, "incoming.messages");
+            } catch (error) {
+                console.error("Failed to publish message to RabbitMQ:", error);
+            }
+        }
 
         res.sendStatus(200);
     };
