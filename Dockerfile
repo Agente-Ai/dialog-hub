@@ -10,8 +10,8 @@ RUN npm install
 
 COPY . .
 
-# Expõe a porta 80
-EXPOSE 80
+# Expõe a porta 8080
+EXPOSE 8080
 
 # Comando para iniciar o servidor
 CMD ["node", "index.js"]

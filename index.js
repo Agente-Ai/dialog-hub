@@ -22,6 +22,6 @@ app.get("/", (req, res) => {
 Checkout README.md to start.</pre>`);
 });
 
-app.listen(PORT || 80, () => {
-    console.log(`Server is listening on port: ${PORT || 80}`);
+app.listen(PORT || 8080, () => {
+    console.log(`Server is listening on port: ${PORT || 8080}`);
 });
