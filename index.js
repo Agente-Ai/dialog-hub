@@ -13,7 +13,6 @@ const { PORT, GRAPH_API_TOKEN, GRAPH_NUMBER_ID, WEBHOOK_VERIFY_TOKEN } = process
 const webhookRoutes = createWebhookRoutes({
     GRAPH_API_TOKEN,
     WEBHOOK_VERIFY_TOKEN,
-    publishToQueue,
 });
 
 app.use(webhookRoutes);
