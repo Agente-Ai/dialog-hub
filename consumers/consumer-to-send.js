@@ -24,7 +24,7 @@ const consumerToSend = ({ rabbitMQChannel, GRAPH_API_TOKEN }) => {
                     }
                 );
 
-                console.log("Success send request message Meta:", response);
+                console.log("Success send request message Meta:", response.data);
 
             } catch (error) {
                 console.error("Failed to send message:", error.response?.data || error.message);
