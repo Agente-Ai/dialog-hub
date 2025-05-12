@@ -18,6 +18,7 @@ export const saveIncomingMessage = async (messageData) => {
     const messageId = event.id;
     const timestamp = event.timestamp;
     const metadata = value.metadata;
+    const type = isStatusMessage ? 'status' : event.type;
     const phoneNumberId = metadata.phone_number_id;
     const displayPhoneNumber = metadata.display_phone_number;
     const whatsappBusinessAccountId = entry.id;
@@ -28,7 +29,7 @@ export const saveIncomingMessage = async (messageData) => {
     if (statuses) {
       from = event.recipient_id;
       content = {
-        type: 'status',
+        type,
         raw: event,
       };
     } else if (messages) {
