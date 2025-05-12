@@ -1,4 +1,3 @@
-import Message from '../models/Message.js';
 import { findOrCreateConversation } from './conversationService.js';
 import ContentMessage from '../models/ContentMessage.js';
 import StatusMessage from '../models/StatusMessage.js';
@@ -92,10 +91,10 @@ export const saveOutgoingMessage = async (messageData) => {
 
     // Encontra ou cria a conversa
     const { conversation } = await findOrCreateConversation({
-      whatsappBusinessAccountId,
+      from,
       phoneNumberId,
       displayPhoneNumber,
-      from
+      whatsappBusinessAccountId,
     });
 
     // Salva na tabela de mensagens de conteúdo
@@ -103,8 +102,8 @@ export const saveOutgoingMessage = async (messageData) => {
       content,
       messageId,
       type: 'outgoing',
-      ConversationId: conversation.id,
       metadata: messageData,
+      ConversationId: conversation.id,
     });
 
     return savedMessage;
