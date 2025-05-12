@@ -84,6 +84,7 @@ export const saveOutgoingMessage = async (messageData) => {
       from,
       content,
       messageId,
+      timestamp,
       phone_number_id: phoneNumberId,
       display_phone_number: displayPhoneNumber,
       whatsapp_business_account_id: whatsappBusinessAccountId,
@@ -104,6 +105,7 @@ export const saveOutgoingMessage = async (messageData) => {
       type: 'outgoing',
       metadata: messageData,
       ConversationId: conversation.id,
+      timestamp: new Date(timestamp * 1000),
     });
 
     return savedMessage;
