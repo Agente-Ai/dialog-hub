@@ -79,7 +79,7 @@ export const saveOutgoingMessage = async (messageData) => {
     // Extrai dados relevantes da mensagem enviada
     const { content, from, phone_number_id: phoneNumberId, display_phone_number: displayPhoneNumber, messageId } = messageData;
 
-    console.table('Conteúdo da mensagem enviada:', content);
+    console.log('Conteúdo da mensagem enviada:', content);
     console.log('Número de telefone do remetente:', from);
     console.log('ID do número de telefone:', phoneNumberId);
     console.log('Número de telefone formatado para exibição:', displayPhoneNumber);
