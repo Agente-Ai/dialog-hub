@@ -11,13 +11,14 @@ O modelo `Conversation` representa uma conversa com um cliente via WhatsApp.
 | Campo | Tipo | Descrição |
 | ----- | ---- | --------- |
 | id | UUID | Identificador único da conversa |
-| whatsappBusinessAccountId | String | ID da conta de negócios do WhatsApp |
-| phoneNumberId | String | ID do número de telefone |
+| whatsapp_business_account_id | String | ID da conta de negócios do WhatsApp |
+| phone_number_id | String | ID do número de telefone |
+| display_phone_number | String | Número de telefone formatado para exibição |
 | from | String | Número de telefone do cliente |
 | status | Enum | Estado da conversa ('active', 'closed') |
-| createdAt | Date | Data de criação do registro |
-| updatedAt | Date | Data da última atualização |
-| deletedAt | Date | Data de exclusão (soft delete) |
+| created_at | Date | Data de criação do registro |
+| updated_at | Date | Data da última atualização |
+| deleted_at | Date | Data de exclusão (soft delete) |
 
 ## Modelo Message (Mensagem)
 

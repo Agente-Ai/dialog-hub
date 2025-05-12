@@ -15,6 +15,11 @@ const Conversation = sequelize.define('Conversation', {
     type: DataTypes.STRING,
     allowNull: false
   },
+  displayPhoneNumber: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    comment: 'Número de telefone formatado para exibição'
+  },
   from: {
     type: DataTypes.STRING,
     allowNull: false,
