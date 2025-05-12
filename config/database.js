@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+console.log("TESTEEEEEEEEEEEEEE", process.env.DB_PASSWORD)
+
 // Configuração da conexão com o PostgreSQL
 const sequelize = new Sequelize(
   process.env.DB_NAME || 'dialog_hub',
