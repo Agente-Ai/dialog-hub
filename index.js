@@ -1,8 +1,13 @@
 import dotenv from "dotenv";
 import express from "express";
+import swaggerUi from "swagger-ui-express";
 import { startConsumers } from "./consumers/index.js";
 import createWebhookRoutes from "./routes/webhookRoutes.js";
+import conversationRoutes from "./routes/conversationRoutes.js";
+import statisticsRoutes from "./routes/statisticsRoutes.js";
 import { connectToRabbitMQ, publishToQueue } from "./rabbitmq.js";
+import { syncDatabase } from "./models/index.js";
+import swaggerSpec from "./config/swagger.js";
 
 dotenv.config();
 
@@ -13,6 +18,10 @@ const { PORT, GRAPH_API_TOKEN, WEBHOOK_VERIFY_TOKEN } = process.env;
 
 (async () => {
     try {
+        // Sincroniza o banco de dados
+        await syncDatabase();
+        console.log('Database initialized successfully');
+
         const rabbitMQChannel = await connectToRabbitMQ();
 
         // Start consumers with dependencies
@@ -34,10 +43,20 @@ const webhookRoutes = createWebhookRoutes({
 });
 
 app.use(webhookRoutes);
+app.use('/api', conversationRoutes);
+app.use('/api', statisticsRoutes);
+
+// Configuração do Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// Endpoint para o arquivo JSON do Swagger
+app.get('/swagger.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
+});
 
 app.get("/", (req, res) => {
-    res.send(`<pre>Nothing to see here.
-Checkout README.md to start.</pre>`);
+    res.send('ok');
 });
 
 app.listen(PORT || 8080, () => {

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { saveOutgoingMessage } from "../services/messageService.js";
 
 const consumerToSend = ({ rabbitMQChannel, GRAPH_API_TOKEN }) => {
     // Ensure the queue is not re-declared here
@@ -7,7 +8,10 @@ const consumerToSend = ({ rabbitMQChannel, GRAPH_API_TOKEN }) => {
             const messageContent = JSON.parse(msg.content.toString());
 
             try {
-                // Send message via WhatsApp API
+                // Salva a mensagem enviada no banco de dados primeiro
+                await saveOutgoingMessage(messageContent);
+                
+                // Envia a mensagem via API do WhatsApp
                 const response = await axios.post(
                     `https://graph.facebook.com/v22.0/${messageContent.phone_number_id}/messages`,
                     {

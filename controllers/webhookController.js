@@ -1,13 +1,21 @@
+import { saveIncomingMessage } from '../services/messageService.js';
+
 export const createWebhookController = ({ publishToQueue }) => {
     const handleWebhookPost = async (req, res) => {
         const message = req.body.entry?.[0]?.changes[0]?.value?.messages?.[0];
 
         if (message?.type === "text") {
             try {
+                // Salva a mensagem recebida no banco de dados
+                await saveIncomingMessage(req.body);
+
+                // Publica na fila para processamento adicional
                 publishToQueue(req.body, "incoming.messages");
             } catch (error) {
-                console.error("Failed to publish message to RabbitMQ:", error);
+                console.error("Falha ao processar mensagem:", error);
             }
+        } else {
+            console.log("Mensagem não é do tipo texto ou formato não reconhecido");
         }
 
         res.sendStatus(200);
