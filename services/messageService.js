@@ -82,14 +82,13 @@ export const saveOutgoingMessage = async (messageData) => {
 
     // Extrai dados relevantes da mensagem enviada
     const {
-      content,
       from,
+      content,
+      messageId,
       phone_number_id: phoneNumberId,
       display_phone_number: displayPhoneNumber,
-      messageId
+      whatsapp_business_account_id: whatsappBusinessAccountId,
     } = messageData;
-
-    const whatsappBusinessAccountId = messageData.whatsapp_business_account_id || '';
 
     // Encontra ou cria a conversa
     const { conversation } = await findOrCreateConversation({
