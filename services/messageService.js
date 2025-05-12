@@ -81,12 +81,12 @@ export const saveOutgoingMessage = async (messageData) => {
     // Extrai dados relevantes da mensagem enviada
     const { content, from, phone_number_id: phoneNumberId, display_phone_number: displayPhoneNumber, messageId } = messageData;
 
-    console.log('Conteúdo da mensagem enviada:', content);
-    console.log('Número de telefone do remetente:', from);
-    console.log('ID do número de telefone:', phoneNumberId);
-    console.log('Número de telefone formatado para exibição:', displayPhoneNumber);
-    console.log('ID da mensagem:', messageId);
-    console.log('Dados adicionais da mensagem:', messageData);
+    const whatsappBusinessAccountId = messageData.whatsapp_business_account_id;
+
+    if (!whatsappBusinessAccountId) {
+      console.error('ID da conta de negócios do WhatsApp não encontrado.');
+      return;
+    }
 
     // Encontra ou cria a conversa
     const { conversation } = await findOrCreateConversation({
