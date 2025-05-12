@@ -14,7 +14,7 @@ export const syncDatabase = async () => {
   try {
     await sequelize.authenticate();
     console.log('Conexão com o banco de dados estabelecida com sucesso.');
-    
+
     // Force: true irá dropar a tabela se ela já existir (use com cuidado)
     await sequelize.sync({ force: false, alter: true });
     console.log('Todos os modelos sincronizados com sucesso.');

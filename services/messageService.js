@@ -40,7 +40,7 @@ export const saveIncomingMessage = async (messageData) => {
       const savedMessage = await StatusMessage.create({
         messageId,
         content: event,
-        type: 'status',
+        type: event.status,
         timestamp: new Date(timestamp * 1000),
         ConversationId: conversation.id,
         metadata: messageData,
