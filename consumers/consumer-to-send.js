@@ -9,9 +9,6 @@ const consumerToSend = ({ rabbitMQChannel, GRAPH_API_TOKEN }) => {
         const messageContent = JSON.parse(msg.content.toString());
 
         try {
-            // Salva a mensagem enviada no banco de dados primeiro
-            await saveOutgoingMessage(messageContent);
-
             // Envia a mensagem via API do WhatsApp
             const requestBody = {
                 to: messageContent.from,
@@ -33,6 +30,11 @@ const consumerToSend = ({ rabbitMQChannel, GRAPH_API_TOKEN }) => {
             );
 
             console.log("Success send request message Meta:", response.data);
+
+            const { id: messageId } = [response.data.messages];
+
+            // Salva a mensagem enviada no banco de dados primeiro
+            await saveOutgoingMessage({ ...messageContent, messageId });
 
             rabbitMQChannel.ack(msg);
         } catch (error) {

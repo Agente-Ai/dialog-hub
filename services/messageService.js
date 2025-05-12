@@ -11,10 +11,10 @@ export const saveIncomingMessage = async (messageData) => {
     const from = message.from;
     const messageId = message.id;
     const timestamp = message.timestamp;
-    
+
     // Prepara o conteúdo da mensagem baseado no tipo da mensagem
     let content = {};
-    
+
     // Processa diferentes tipos de conteúdo
     if (message.type === 'text' && message.text) {
       content = {
@@ -48,13 +48,13 @@ export const saveIncomingMessage = async (messageData) => {
         raw: message
       };
     }
-    
+
     const metadata = messageData.entry[0].changes[0].value.metadata;
     const phoneNumberId = metadata.phone_number_id;
     const displayPhoneNumber = metadata.display_phone_number;
     // Se wabaId não estiver presente, usa o id da entry
     const whatsappBusinessAccountId = metadata.wabaId || messageData.entry[0].id;
-    
+
     // Encontra ou cria a conversa
     const { conversation } = await findOrCreateConversation({
       whatsappBusinessAccountId,
@@ -85,45 +85,8 @@ export const saveIncomingMessage = async (messageData) => {
  */
 export const saveOutgoingMessage = async (messageData) => {
   try {
-    const { from, phone_number_id: phoneNumberId, display_phone_number: displayPhoneNumber } = messageData;
-    
-    // Prepara o conteúdo da mensagem
-    let content = {};
-    
-    // Verifica o tipo de conteúdo a ser enviado
-    if (messageData.text) {
-      content = {
-        type: 'text',
-        text: messageData.text
-      };
-    } else if (messageData.image) {
-      content = {
-        type: 'image',
-        image: messageData.image
-      };
-    } else if (messageData.audio) {
-      content = {
-        type: 'audio',
-        audio: messageData.audio
-      };
-    } else if (messageData.video) {
-      content = {
-        type: 'video',
-        video: messageData.video
-      };
-    } else if (messageData.document) {
-      content = {
-        type: 'document',
-        document: messageData.document
-      };
-    } else {
-      // Fallback para outros tipos
-      content = {
-        type: 'unknown',
-        raw: messageData
-      };
-    }
-    
+    const { content, from, phone_number_id: phoneNumberId, display_phone_number: displayPhoneNumber, messageId } = messageData;
+
     // Encontra a conversa
     const { conversation } = await findOrCreateConversation({
       whatsappBusinessAccountId: messageData.whatsapp_business_account_id || messageData.whatsappBusinessAccountId || 'unknown',
@@ -135,6 +98,7 @@ export const saveOutgoingMessage = async (messageData) => {
     // Cria a mensagem
     const savedMessage = await Message.create({
       content,
+      messageId,
       type: 'outgoing',
       ConversationId: conversation.id,
       metadata: messageData // Armazena os metadados adicionais
