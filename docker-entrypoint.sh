@@ -6,7 +6,7 @@ set -e
 # Função para verificar se o PostgreSQL está pronto
 wait_for_postgres() {
   echo "Aguardando PostgreSQL..."
-  until PGPASSWORD=$DB_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c '\q'; do
+  until PGPASSWORD=$POSTGRES_PASSWORD psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME" -c '\q'; do
     echo "PostgreSQL não está disponível ainda - aguardando..."
     sleep 2
   done
