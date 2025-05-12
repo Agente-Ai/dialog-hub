@@ -17,10 +17,5 @@ COPY . .
 # Expõe a porta 8080
 EXPOSE 8080
 
-# Script de inicialização que espera o PostgreSQL estar pronto
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-
 # Comando para iniciar o servidor
-ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["node", "index.js"]
