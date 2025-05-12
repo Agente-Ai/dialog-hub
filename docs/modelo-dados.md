@@ -30,7 +30,7 @@ O modelo `Message` representa uma mensagem individual dentro de uma conversa.
 | ----- | ---- | --------- |
 | id | UUID | Identificador único da mensagem |
 | message_id | String | ID original da mensagem do WhatsApp (apenas para mensagens recebidas) |
-| text | Text | Conteúdo da mensagem |
+| content | JSONB | Conteúdo da mensagem (texto, imagem, áudio, vídeo, etc.) |
 | type | Enum | Tipo da mensagem ('incoming', 'outgoing') |
 | timestamp | Date | Data e hora da mensagem |
 | metadata | JSONB | Metadados adicionais da mensagem |

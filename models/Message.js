@@ -14,9 +14,10 @@ const Message = sequelize.define('Message', {
     field: 'message_id',
     comment: 'ID original da mensagem do WhatsApp'
   },
-  text: {
-    type: DataTypes.TEXT,
-    allowNull: false
+  content: {
+    type: DataTypes.JSONB,
+    allowNull: false,
+    comment: 'Conteúdo da mensagem (texto, imagem, áudio, vídeo, etc.)'
   },
   type: {
     type: DataTypes.ENUM('incoming', 'outgoing'),

@@ -81,9 +81,36 @@ const swaggerDefinition = {
             type: 'string',
             description: 'ID original da mensagem do WhatsApp',
           },
-          text: {
-            type: 'string',
-            description: 'Conteúdo da mensagem',
+          content: {
+            type: 'object',
+            description: 'Conteúdo da mensagem (texto, imagem, áudio, vídeo, etc.)',
+            properties: {
+              type: {
+                type: 'string',
+                enum: ['text', 'image', 'audio', 'video', 'document', 'unknown'],
+                description: 'Tipo do conteúdo da mensagem'
+              },
+              text: {
+                type: 'string',
+                description: 'Texto da mensagem (quando o tipo é text)'
+              },
+              image: {
+                type: 'object',
+                description: 'Dados da imagem (quando o tipo é image)'
+              },
+              audio: {
+                type: 'object',
+                description: 'Dados do áudio (quando o tipo é audio)'
+              },
+              video: {
+                type: 'object',
+                description: 'Dados do vídeo (quando o tipo é video)'
+              },
+              document: {
+                type: 'object',
+                description: 'Dados do documento (quando o tipo é document)'
+              }
+            }
           },
           type: {
             type: 'string',

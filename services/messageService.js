@@ -10,8 +10,44 @@ export const saveIncomingMessage = async (messageData) => {
     const message = messageData.entry[0].changes[0].value.messages[0];
     const from = message.from;
     const messageId = message.id;
-    const text = message.text.body;
     const timestamp = message.timestamp;
+    
+    // Prepara o conteúdo da mensagem baseado no tipo da mensagem
+    let content = {};
+    
+    // Processa diferentes tipos de conteúdo
+    if (message.type === 'text' && message.text) {
+      content = {
+        type: 'text',
+        text: message.text.body
+      };
+    } else if (message.type === 'image' && message.image) {
+      content = {
+        type: 'image',
+        image: message.image
+      };
+    } else if (message.type === 'audio' && message.audio) {
+      content = {
+        type: 'audio',
+        audio: message.audio
+      };
+    } else if (message.type === 'video' && message.video) {
+      content = {
+        type: 'video',
+        video: message.video
+      };
+    } else if (message.type === 'document' && message.document) {
+      content = {
+        type: 'document',
+        document: message.document
+      };
+    } else {
+      // Fallback para outros tipos ou formatos desconhecidos
+      content = {
+        type: message.type || 'unknown',
+        raw: message
+      };
+    }
     
     const metadata = messageData.entry[0].changes[0].value.metadata;
     const phoneNumberId = metadata.phone_number_id;
@@ -30,7 +66,7 @@ export const saveIncomingMessage = async (messageData) => {
     // Cria a mensagem
     const savedMessage = await Message.create({
       messageId,
-      text,
+      content,
       type: 'incoming',
       timestamp: new Date(timestamp * 1000), // Converte timestamp Unix para Date
       ConversationId: conversation.id,
@@ -49,7 +85,44 @@ export const saveIncomingMessage = async (messageData) => {
  */
 export const saveOutgoingMessage = async (messageData) => {
   try {
-    const { from, phone_number_id: phoneNumberId, text, display_phone_number: displayPhoneNumber } = messageData;
+    const { from, phone_number_id: phoneNumberId, display_phone_number: displayPhoneNumber } = messageData;
+    
+    // Prepara o conteúdo da mensagem
+    let content = {};
+    
+    // Verifica o tipo de conteúdo a ser enviado
+    if (messageData.text) {
+      content = {
+        type: 'text',
+        text: messageData.text
+      };
+    } else if (messageData.image) {
+      content = {
+        type: 'image',
+        image: messageData.image
+      };
+    } else if (messageData.audio) {
+      content = {
+        type: 'audio',
+        audio: messageData.audio
+      };
+    } else if (messageData.video) {
+      content = {
+        type: 'video',
+        video: messageData.video
+      };
+    } else if (messageData.document) {
+      content = {
+        type: 'document',
+        document: messageData.document
+      };
+    } else {
+      // Fallback para outros tipos
+      content = {
+        type: 'unknown',
+        raw: messageData
+      };
+    }
     
     // Encontra a conversa
     const { conversation } = await findOrCreateConversation({
@@ -61,7 +134,7 @@ export const saveOutgoingMessage = async (messageData) => {
 
     // Cria a mensagem
     const savedMessage = await Message.create({
-      text,
+      content,
       type: 'outgoing',
       ConversationId: conversation.id,
       metadata: messageData // Armazena os metadados adicionais
