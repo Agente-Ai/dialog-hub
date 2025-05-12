@@ -6,6 +6,8 @@ import { findOrCreateConversation } from './conversationService.js';
  */
 export const saveIncomingMessage = async (messageData) => {
   try {
+    console.log('Salvando mensagem recebida:', messageData);
+
     // Extrai dados relevantes da mensagem recebida
     const message = messageData.entry[0].changes[0].value.messages[0];
     const from = message.from;

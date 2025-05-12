@@ -31,10 +31,10 @@ const consumerToSend = ({ rabbitMQChannel, GRAPH_API_TOKEN }) => {
 
             console.log("Success send request message Meta:", response.data);
 
-            const { id: messageId } = [response.data.messages];
+            const { id } = response.data.messages[0];
 
             // Salva a mensagem enviada no banco de dados primeiro
-            await saveOutgoingMessage({ ...messageContent, messageId });
+            await saveOutgoingMessage({ ...messageContent, messageId: id });
 
             rabbitMQChannel.ack(msg);
         } catch (error) {
