@@ -8,8 +8,6 @@ import StatusMessage from '../models/StatusMessage.js';
  */
 export const saveIncomingMessage = async (messageData) => {
   try {
-    console.log('Salvando mensagem recebida:', messageData);
-
     // Extrai dados relevantes da mensagem recebida
     const entry = messageData.entry[0];
     const value = entry.changes[0].value;
@@ -36,6 +34,8 @@ export const saveIncomingMessage = async (messageData) => {
     });
 
     if (statuses) {
+      console.log('Salvando status recebido:', event);
+
       // Salva na tabela de mensagens de status
       const savedMessage = await StatusMessage.create({
         messageId,
@@ -48,6 +48,8 @@ export const saveIncomingMessage = async (messageData) => {
 
       return savedMessage;
     } else if (messages) {
+      console.log('Salvando mensagem recebida:', event);
+
       content = {
         type: event.type,
         [event.type]: event[event.type].body,
@@ -79,14 +81,15 @@ export const saveOutgoingMessage = async (messageData) => {
     console.log('Salvando mensagem enviada:', messageData);
 
     // Extrai dados relevantes da mensagem enviada
-    const { content, from, phone_number_id: phoneNumberId, display_phone_number: displayPhoneNumber, messageId } = messageData;
+    const {
+      content,
+      from,
+      phone_number_id: phoneNumberId,
+      display_phone_number: displayPhoneNumber,
+      messageId
+    } = messageData;
 
-    const whatsappBusinessAccountId = messageData.whatsapp_business_account_id;
-
-    if (!whatsappBusinessAccountId) {
-      console.error('ID da conta de negócios do WhatsApp não encontrado.');
-      return;
-    }
+    const whatsappBusinessAccountId = messageData.whatsapp_business_account_id || '';
 
     // Encontra ou cria a conversa
     const { conversation } = await findOrCreateConversation({
