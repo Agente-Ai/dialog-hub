@@ -85,6 +85,9 @@ export const saveIncomingMessage = async (messageData) => {
  */
 export const saveOutgoingMessage = async (messageData) => {
   try {
+    console.log('Salvando mensagem enviada:', messageData);
+
+    // Extrai dados relevantes da mensagem enviada
     const { content, from, phone_number_id: phoneNumberId, display_phone_number: displayPhoneNumber, messageId } = messageData;
 
     // Encontra a conversa
