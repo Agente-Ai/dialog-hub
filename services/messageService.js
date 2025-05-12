@@ -94,10 +94,10 @@ export const saveOutgoingMessage = async (messageData) => {
 
     // Encontra a conversa
     const { conversation } = await findOrCreateConversation({
-      whatsappBusinessAccountId: messageData.whatsapp_business_account_id || messageData.whatsappBusinessAccountId || 'unknown',
+      from,
       phoneNumberId,
       displayPhoneNumber,
-      from
+      whatsappBusinessAccountId: messageData.whatsapp_business_account_id,
     });
 
     // Cria a mensagem
