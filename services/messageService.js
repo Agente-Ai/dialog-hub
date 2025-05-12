@@ -33,7 +33,7 @@ export const saveIncomingMessage = async (messageData) => {
       text,
       type: 'incoming',
       timestamp: new Date(timestamp * 1000), // Converte timestamp Unix para Date
-      conversationId: conversation.id,
+      ConversationId: conversation.id,
       metadata: messageData // Armazena todos os metadados para referência
     });
 
@@ -53,7 +53,7 @@ export const saveOutgoingMessage = async (messageData) => {
     
     // Encontra a conversa
     const { conversation } = await findOrCreateConversation({
-      whatsappBusinessAccountId: messageData.whatsappBusinessAccountId || 'unknown',
+      whatsappBusinessAccountId: messageData.whatsapp_business_account_id || messageData.whatsappBusinessAccountId || 'unknown',
       phoneNumberId,
       displayPhoneNumber,
       from
@@ -63,7 +63,7 @@ export const saveOutgoingMessage = async (messageData) => {
     const savedMessage = await Message.create({
       text,
       type: 'outgoing',
-      conversationId: conversation.id,  // Nome snake_case
+      ConversationId: conversation.id,
       metadata: messageData // Armazena os metadados adicionais
     });
 

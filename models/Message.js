@@ -11,6 +11,7 @@ const Message = sequelize.define('Message', {
   messageId: {
     type: DataTypes.STRING,
     allowNull: true,
+    field: 'message_id',
     comment: 'ID original da mensagem do WhatsApp'
   },
   text: {

@@ -98,6 +98,38 @@ http://localhost:8080/api-docs
 - `npm run db:migrate` - Executa a migração do banco de dados
 - `npm run db:sync` - Sincroniza o esquema do banco de dados (modo seguro)
 - `npm run db:seed` - Popula o banco de dados com dados de exemplo para testes
+- `npm run db:examples` - Executa consultas de exemplo para testar o banco de dados
+
+## Modelos de Dados
+
+### Tabela de Conversas (conversations)
+
+| Campo | Tipo | Descrição |
+|-------|------|-----------|
+| id | UUID | Identificador único da conversa |
+| whatsapp_business_account_id | String | ID da conta de negócios do WhatsApp |
+| phone_number_id | String | ID do número de telefone |
+| display_phone_number | String | Número do telefone formatado para exibição |
+| from | String | Número de telefone do cliente |
+| status | Enum | Estado da conversa ('active', 'closed') |
+| created_at | Timestamp | Data de criação |
+| updated_at | Timestamp | Data de atualização |
+| deleted_at | Timestamp | Data de exclusão (soft delete) |
+
+### Tabela de Mensagens (messages)
+
+| Campo | Tipo | Descrição |
+|-------|------|-----------|
+| id | UUID | Identificador único da mensagem |
+| message_id | String | ID original da mensagem do WhatsApp |
+| text | Text | Conteúdo da mensagem |
+| type | Enum | Tipo da mensagem ('incoming', 'outgoing') |
+| timestamp | Timestamp | Data e hora da mensagem |
+| metadata | JSONB | Metadados adicionais da mensagem |
+| conversation_id | UUID | ID da conversa relacionada |
+| created_at | Timestamp | Data de criação |
+| updated_at | Timestamp | Data de atualização |
+| deleted_at | Timestamp | Data de exclusão (soft delete) |
 
 ## Estrutura do Projeto
 

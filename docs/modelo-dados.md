@@ -13,7 +13,7 @@ O modelo `Conversation` representa uma conversa com um cliente via WhatsApp.
 | id | UUID | Identificador único da conversa |
 | whatsapp_business_account_id | String | ID da conta de negócios do WhatsApp |
 | phone_number_id | String | ID do número de telefone |
-| display_phone_number | String | Número de telefone formatado para exibição |
+| display_phone_number | String | Número do telefone formatado para exibição |
 | from | String | Número de telefone do cliente |
 | status | Enum | Estado da conversa ('active', 'closed') |
 | created_at | Date | Data de criação do registro |
@@ -29,15 +29,15 @@ O modelo `Message` representa uma mensagem individual dentro de uma conversa.
 | Campo | Tipo | Descrição |
 | ----- | ---- | --------- |
 | id | UUID | Identificador único da mensagem |
-| messageId | String | ID original da mensagem do WhatsApp (apenas para mensagens recebidas) |
+| message_id | String | ID original da mensagem do WhatsApp (apenas para mensagens recebidas) |
 | text | Text | Conteúdo da mensagem |
 | type | Enum | Tipo da mensagem ('incoming', 'outgoing') |
 | timestamp | Date | Data e hora da mensagem |
 | metadata | JSONB | Metadados adicionais da mensagem |
-| ConversationId | UUID | ID da conversa relacionada |
-| createdAt | Date | Data de criação do registro |
-| updatedAt | Date | Data da última atualização |
-| deletedAt | Date | Data de exclusão (soft delete) |
+| conversation_id | UUID | ID da conversa relacionada |
+| created_at | Date | Data de criação do registro |
+| updated_at | Date | Data da última atualização |
+| deleted_at | Date | Data de exclusão (soft delete) |
 
 ## Relacionamentos
 
@@ -47,24 +47,24 @@ O modelo `Message` representa uma mensagem individual dentro de uma conversa.
 ## Diagrama ER
 
 ```
-+-------------------+       +------------------+
-|   Conversation    |       |     Message      |
-+-------------------+       +------------------+
-| id                |       | id               |
-| whatsappBusinessA |       | messageId        |
-| phoneNumberId     |       | text             |
-| from              |       | type             |
-| status            |       | timestamp        |
-| createdAt         |       | metadata         |
-| updatedAt         |       | ConversationId   |
-| deletedAt         |       | createdAt        |
-+-------------------+       | updatedAt        |
-         |                  | deletedAt        |
-         |                  +------------------+
-         |                          |
-         +----------|--------------+
-                    |
-                  1 : N
++------------------------+       +---------------------+
+|      conversations     |       |       messages      |
++------------------------+       +---------------------+
+| id                     |       | id                  |
+| whatsapp_business_acco |       | message_id          |
+| phone_number_id        |       | text                |
+| display_phone_number   |       | type                |
+| from                   |       | timestamp           |
+| status                 |       | metadata            |
+| created_at             |       | conversation_id     |
+| updated_at             |       | created_at          |
+| deleted_at             |       | updated_at          |
++------------------------+       | deleted_at          |
+          |                      +---------------------+
+          |                               |
+          +----------|--------------------|
+                     |
+                    1 : N
 ```
 
 ## Fluxo de Dados

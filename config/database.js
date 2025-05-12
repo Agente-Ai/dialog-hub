@@ -20,11 +20,10 @@ const sequelize = new Sequelize(
       idle: 10000
     },
     define: {
-      // Use snake_case para nomes de tabelas e atributos
+      // Use snake_case para nomes de tabelas e colunas
       underscored: true,
       underscoredAll: true,
-      // Dica: Se preferir manter os nomes das tabelas em minúsculas mas sem underscores, descomente a linha abaixo
-      // freezeTableName: true
+      freezeTableName: false
     }
   }
 );

@@ -9,15 +9,18 @@ const Conversation = sequelize.define('Conversation', {
   },
   whatsappBusinessAccountId: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    field: 'whatsapp_business_account_id'
   },
   phoneNumberId: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
+    field: 'phone_number_id'
   },
   displayPhoneNumber: {
     type: DataTypes.STRING,
     allowNull: true,
+    field: 'display_phone_number',
     comment: 'Número de telefone formatado para exibição'
   },
   from: {

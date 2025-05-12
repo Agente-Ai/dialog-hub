@@ -4,37 +4,27 @@ import Message from '../models/Message.js';
 /**
  * Encontra ou cria uma conversa ativa
  */
-export const findOrCreateConversation = async ({ whatsappBusinessAccountId, phoneNumberId, displayPhoneNumber, from }) => {
+export const findOrCreateConversation = async ({ whatsappBusinessAccountId, phoneNumberId, from, displayPhoneNumber }) => {
   try {
-    // Buscar por uma conversa ativa existente
-    let conversation = await Conversation.findOne({
+    const [conversation, created] = await Conversation.findOrCreate({
       where: {
         whatsappBusinessAccountId,
         phoneNumberId,
         from,
         status: 'active'
+      },
+      defaults: {
+        displayPhoneNumber
       }
     });
 
-    // Se a conversa existir, mas não tiver displayPhoneNumber, atualize-a
-    if (conversation && displayPhoneNumber && !conversation.displayPhoneNumber) {
+    // Se a conversa já existir mas displayPhoneNumber não estiver definido, atualize-o
+    if (!created && !conversation.displayPhoneNumber && displayPhoneNumber) {
       conversation.displayPhoneNumber = displayPhoneNumber;
       await conversation.save();
     }
-    
-    // Se não existir, crie uma nova
-    if (!conversation) {
-      conversation = await Conversation.create({
-        whatsappBusinessAccountId,
-        phoneNumberId,
-        displayPhoneNumber,
-        from,
-        status: 'active'
-      });
-      return { conversation, created: true };
-    }
 
-    return { conversation, created: false };
+    return { conversation, created };
   } catch (error) {
     console.error('Erro ao encontrar ou criar conversa:', error);
     throw error;

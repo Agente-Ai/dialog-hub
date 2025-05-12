@@ -15,9 +15,11 @@ async function seedDatabase() {
     const conversations = [];
     for (let i = 0; i < 5; i++) {
       const phoneNumber = `551199${Math.floor(1000000 + Math.random() * 9000000)}`;
+      const formattedPhoneNumber = `+55 (11) 9${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(1000 + Math.random() * 9000)}`;
       const conversation = await Conversation.create({
         whatsappBusinessAccountId: '123456789',
         phoneNumberId: '987654321',
+        displayPhoneNumber: formattedPhoneNumber,
         from: phoneNumber,
         status: i % 4 === 0 ? 'closed' : 'active'
       });

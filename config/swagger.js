@@ -36,13 +36,17 @@ const swaggerDefinition = {
             format: 'uuid',
             description: 'ID único da conversa',
           },
-          whatsappBusinessAccountId: {
+          whatsapp_business_account_id: {
             type: 'string',
             description: 'ID da conta de negócios do WhatsApp',
           },
-          phoneNumberId: {
+          phone_number_id: {
             type: 'string',
             description: 'ID do número de telefone',
+          },
+          display_phone_number: {
+            type: 'string',
+            description: 'Número de telefone formatado para exibição',
           },
           from: {
             type: 'string',
@@ -53,12 +57,12 @@ const swaggerDefinition = {
             enum: ['active', 'closed'],
             description: 'Status da conversa',
           },
-          createdAt: {
+          created_at: {
             type: 'string',
             format: 'date-time',
             description: 'Data de criação',
           },
-          updatedAt: {
+          updated_at: {
             type: 'string',
             format: 'date-time',
             description: 'Data de atualização',
@@ -73,7 +77,7 @@ const swaggerDefinition = {
             format: 'uuid',
             description: 'ID único da mensagem',
           },
-          messageId: {
+          message_id: {
             type: 'string',
             description: 'ID original da mensagem do WhatsApp',
           },
@@ -91,17 +95,17 @@ const swaggerDefinition = {
             format: 'date-time',
             description: 'Timestamp da mensagem',
           },
-          ConversationId: {
+          conversation_id: {
             type: 'string',
             format: 'uuid',
             description: 'ID da conversa relacionada',
           },
-          createdAt: {
+          created_at: {
             type: 'string',
             format: 'date-time',
             description: 'Data de criação',
           },
-          updatedAt: {
+          updated_at: {
             type: 'string',
             format: 'date-time',
             description: 'Data de atualização',

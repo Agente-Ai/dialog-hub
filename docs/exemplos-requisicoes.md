@@ -100,7 +100,8 @@ Este arquivo contém exemplos de requisições que podem ser feitas para a API d
   "phone_number_id": "1234567890",
   "from": "5511988888888",
   "text": "Olá! Em que posso ajudar?",
-  "whatsappBusinessAccountId": "9876543210"
+  "display_phone_number": "+55 (11) 99999-9999",
+  "whatsapp_business_account_id": "9876543210"
 }
 ```
 

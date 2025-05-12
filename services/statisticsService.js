@@ -33,7 +33,7 @@ export const getStatistics = async () => {
     
     const conversationsLast24h = await Conversation.count({
       where: {
-        createdAt: {
+        created_at: {
           [Op.gte]: oneDayAgo
         }
       }
@@ -41,7 +41,7 @@ export const getStatistics = async () => {
     
     const messagesLast24h = await Message.count({
       where: {
-        createdAt: {
+        created_at: {
           [Op.gte]: oneDayAgo
         }
       }

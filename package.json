@@ -10,7 +10,8 @@
     "dev": "nodemon index.js",
     "db:sync": "node database/sync.js",
     "db:migrate": "node database/migrate.js",
-    "db:seed": "node database/seed.js"
+    "db:seed": "node database/seed.js",
+    "db:examples": "node database/examples.js"
   },
   "repository": {
     "type": "git",
