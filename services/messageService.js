@@ -9,53 +9,39 @@ export const saveIncomingMessage = async (messageData) => {
     console.log('Salvando mensagem recebida:', messageData);
 
     // Extrai dados relevantes da mensagem recebida
-    const message = messageData.entry[0].changes[0].value.messages[0];
-    const from = message.from;
-    const messageId = message.id;
-    const timestamp = message.timestamp;
-
-    // Prepara o conteúdo da mensagem baseado no tipo da mensagem
-    let content = {};
-
-    // Processa diferentes tipos de conteúdo
-    if (message.type === 'text' && message.text) {
-      content = {
-        type: 'text',
-        text: message.text.body
-      };
-    } else if (message.type === 'image' && message.image) {
-      content = {
-        type: 'image',
-        image: message.image
-      };
-    } else if (message.type === 'audio' && message.audio) {
-      content = {
-        type: 'audio',
-        audio: message.audio
-      };
-    } else if (message.type === 'video' && message.video) {
-      content = {
-        type: 'video',
-        video: message.video
-      };
-    } else if (message.type === 'document' && message.document) {
-      content = {
-        type: 'document',
-        document: message.document
-      };
-    } else {
-      // Fallback para outros tipos ou formatos desconhecidos
-      content = {
-        type: message.type || 'unknown',
-        raw: message
-      };
-    }
-
-    const metadata = messageData.entry[0].changes[0].value.metadata;
+    const entry = messageData.entry[0];
+    const value = entry.changes[0].value;
+    const statuses = value.statuses;
+    const messages = value.messages;
+    const isStatusMessage = !messages || messages.length === 0;
+    const event = isStatusMessage ? statuses[0] : messages[0];
+    const messageId = event.id;
+    const timestamp = event.timestamp;
+    const metadata = value.metadata;
     const phoneNumberId = metadata.phone_number_id;
     const displayPhoneNumber = metadata.display_phone_number;
-    // Se wabaId não estiver presente, usa o id da entry
-    const whatsappBusinessAccountId = metadata.wabaId || messageData.entry[0].id;
+    const whatsappBusinessAccountId = entry.id;
+
+    let content = {};
+    let from = event.from;
+
+    if (statuses) {
+      from = event.recipient_id;
+      content = {
+        type: 'status',
+        raw: event,
+      };
+    } else if (messages) {
+      content = {
+        type,
+        [type]: event[type].body,
+      }
+    } else {
+      content = {
+        type: 'unknown',
+        raw: event,
+      };
+    }
 
     // Encontra ou cria a conversa
     const { conversation } = await findOrCreateConversation({

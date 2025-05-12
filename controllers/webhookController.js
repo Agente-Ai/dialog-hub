@@ -6,8 +6,14 @@ export const createWebhookController = ({ publishToQueue }) => {
             // Salva a mensagem recebida no banco de dados
             await saveIncomingMessage(req.body);
 
-            // Publica na fila para processamento adicional
-            publishToQueue(req.body, "incoming.messages");
+            const entry = req.body.entry[0];
+            const value = entry.changes[0].value;
+            const isStatusMessage = value.statuses;
+
+            if (!isStatusMessage) {
+                // Publica na fila para processamento adicional
+                publishToQueue(req.body, "incoming.messages");
+            }
         } catch (error) {
             console.error("Falha ao processar mensagem:", error);
         }
