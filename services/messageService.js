@@ -1,5 +1,7 @@
 import Message from '../models/Message.js';
 import { findOrCreateConversation } from './conversationService.js';
+import ContentMessage from '../models/ContentMessage.js';
+import StatusMessage from '../models/StatusMessage.js';
 
 /**
  * Salva uma mensagem recebida do webhook do WhatsApp
@@ -32,37 +34,36 @@ export const saveIncomingMessage = async (messageData) => {
         type,
         raw: event,
       };
+
+      // Salva na tabela de mensagens de status
+      const savedMessage = await StatusMessage.create({
+        messageId,
+        content,
+        type: 'status',
+        timestamp: new Date(timestamp * 1000),
+        ConversationId: null, // Atualize conforme necessário
+        metadata: messageData,
+      });
+
+      return savedMessage;
     } else if (messages) {
       content = {
         type,
         [type]: event[type].body,
-      }
-    } else {
-      content = {
-        type: 'unknown',
-        raw: event,
       };
+
+      // Salva na tabela de mensagens de conteúdo
+      const savedMessage = await ContentMessage.create({
+        messageId,
+        content,
+        type: 'incoming',
+        timestamp: new Date(timestamp * 1000),
+        ConversationId: null, // Atualize conforme necessário
+        metadata: messageData,
+      });
+
+      return savedMessage;
     }
-
-    // Encontra ou cria a conversa
-    const { conversation } = await findOrCreateConversation({
-      whatsappBusinessAccountId,
-      phoneNumberId,
-      displayPhoneNumber,
-      from
-    });
-
-    // Cria a mensagem
-    const savedMessage = await Message.create({
-      messageId,
-      content,
-      type: 'incoming',
-      timestamp: new Date(timestamp * 1000), // Converte timestamp Unix para Date
-      ConversationId: conversation.id,
-      metadata: messageData // Armazena todos os metadados para referência
-    });
-
-    return savedMessage;
   } catch (error) {
     console.error('Erro ao salvar mensagem recebida:', error);
     throw error;
@@ -86,21 +87,13 @@ export const saveOutgoingMessage = async (messageData) => {
     console.log('ID da mensagem:', messageId);
     console.log('Dados adicionais da mensagem:', messageData);
 
-    // Encontra a conversa
-    const { conversation } = await findOrCreateConversation({
-      from,
-      phoneNumberId,
-      displayPhoneNumber,
-      whatsappBusinessAccountId: messageData.whatsapp_business_account_id,
-    });
-
-    // Cria a mensagem
-    const savedMessage = await Message.create({
+    // Salva na tabela de mensagens de conteúdo
+    const savedMessage = await ContentMessage.create({
       content,
       messageId,
       type: 'outgoing',
-      ConversationId: conversation.id,
-      metadata: messageData // Armazena os metadados adicionais
+      ConversationId: null, // Atualize conforme necessário
+      metadata: messageData,
     });
 
     return savedMessage;
