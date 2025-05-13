@@ -33,7 +33,7 @@ export const saveIncomingMessage = async (messageData) => {
     });
 
     if (statuses) {
-      console.log('Salvando status recebido:', event);
+      console.log('Salvando status recebido');
 
       // Salva na tabela de mensagens de status
       const savedMessage = await StatusMessage.create({
@@ -47,7 +47,7 @@ export const saveIncomingMessage = async (messageData) => {
 
       return savedMessage;
     } else if (messages) {
-      console.log('Salvando mensagem recebida:', event);
+      console.log('Salvando mensagem recebida');
 
       content = {
         type: event.type,
@@ -77,7 +77,7 @@ export const saveIncomingMessage = async (messageData) => {
  */
 export const saveOutgoingMessage = async (messageData) => {
   try {
-    console.log('Salvando mensagem enviada:', messageData);
+    console.log('Salvando mensagem enviada');
 
     // Extrai dados relevantes da mensagem enviada
     const {
