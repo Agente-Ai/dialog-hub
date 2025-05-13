@@ -15,7 +15,7 @@ export const saveIncomingMessage = async (messageData) => {
     const isStatusMessage = !messages || messages.length === 0;
     const event = isStatusMessage ? statuses[0] : messages[0];
     const messageId = event.id;
-    const timestamp = new Date(event.timestamp);
+    const timestamp = event.timestamp;
     const metadata = value.metadata
     const phoneNumberId = metadata.phone_number_id;
     const displayPhoneNumber = metadata.display_phone_number;
@@ -24,7 +24,7 @@ export const saveIncomingMessage = async (messageData) => {
 
     let content = {};
 
-    console.log("timestamp", timestamp);
+    console.log("event timestamp", timestamp, event);
 
     // Encontra ou cria a conversa
     const { conversation } = await findOrCreateConversation({
