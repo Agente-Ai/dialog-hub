@@ -15,7 +15,7 @@ export const saveIncomingMessage = async (messageData) => {
     const isStatusMessage = !messages || messages.length === 0;
     const event = isStatusMessage ? statuses[0] : messages[0];
     const messageId = event.id;
-    const timestamp = event.timestamp;
+    const timestamp = new Date(event.timestamp * 1000);
     const metadata = value.metadata
     const phoneNumberId = metadata.phone_number_id;
     const displayPhoneNumber = metadata.display_phone_number;
@@ -104,10 +104,10 @@ export const saveOutgoingMessage = async (messageData) => {
     const savedMessage = await ContentMessage.create({
       content,
       messageId,
-      timestamp,
       type: 'outgoing',
       metadata: messageData,
       ConversationId: conversation.id,
+      timestamp: new Date(timestamp * 1000),
     });
 
     return savedMessage;
