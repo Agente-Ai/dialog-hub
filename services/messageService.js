@@ -38,11 +38,11 @@ export const saveIncomingMessage = async (messageData) => {
       // Salva na tabela de mensagens de status
       const savedMessage = await StatusMessage.create({
         messageId,
+        timestamp,
         content: event,
         type: event.status,
-        timestamp: new Date(timestamp * 1000),
-        ConversationId: conversation.id,
         metadata: messageData,
+        ConversationId: conversation.id,
       });
 
       return savedMessage;
@@ -56,12 +56,12 @@ export const saveIncomingMessage = async (messageData) => {
 
       // Salva na tabela de mensagens de conteúdo
       const savedMessage = await ContentMessage.create({
-        messageId,
         content,
+        messageId,
+        timestamp,
         type: 'incoming',
-        timestamp: new Date(timestamp * 1000),
-        ConversationId: conversation.id,
         metadata: messageData,
+        ConversationId: conversation.id,
       });
 
       return savedMessage;
@@ -90,6 +90,8 @@ export const saveOutgoingMessage = async (messageData) => {
       whatsapp_business_account_id: whatsappBusinessAccountId,
     } = messageData;
 
+    const validTimestamp = !isNaN(timestamp) && Number.isFinite(Number(timestamp)) ? new Date(timestamp * 1000) : new Date();
+
     // Encontra ou cria a conversa
     const { conversation } = await findOrCreateConversation({
       from,
@@ -105,7 +107,7 @@ export const saveOutgoingMessage = async (messageData) => {
       type: 'outgoing',
       metadata: messageData,
       ConversationId: conversation.id,
-      timestamp: new Date(timestamp * 1000),
+      timestamp: validTimestamp,
     });
 
     return savedMessage;
