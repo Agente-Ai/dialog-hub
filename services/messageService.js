@@ -90,8 +90,6 @@ export const saveOutgoingMessage = async (messageData) => {
       whatsapp_business_account_id: whatsappBusinessAccountId,
     } = messageData;
 
-    const validTimestamp = !isNaN(timestamp) && Number.isFinite(Number(timestamp)) ? new Date(timestamp * 1000) : new Date();
-
     // Encontra ou cria a conversa
     const { conversation } = await findOrCreateConversation({
       from,
@@ -104,10 +102,10 @@ export const saveOutgoingMessage = async (messageData) => {
     const savedMessage = await ContentMessage.create({
       content,
       messageId,
+      timestamp,
       type: 'outgoing',
       metadata: messageData,
       ConversationId: conversation.id,
-      timestamp: validTimestamp,
     });
 
     return savedMessage;
