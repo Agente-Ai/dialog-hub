@@ -77,7 +77,7 @@ export const saveIncomingMessage = async (messageData) => {
  */
 export const saveOutgoingMessage = async (messageData) => {
   try {
-    console.log('Salvando mensagem enviada');
+    console.log('Salvando mensagem enviada', messageData);
 
     // Extrai dados relevantes da mensagem enviada
     const {
