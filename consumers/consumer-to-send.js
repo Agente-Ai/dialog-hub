@@ -47,7 +47,7 @@ const consumerToSend = ({ rabbitMQChannel, GRAPH_API_TOKEN }) => {
                 phone_number_id,
                 display_phone_number,
                 whatsapp_business_account_id,
-                timestamp: new Date().toISOString(),
+                timestamp: Math.floor(Date.now() / 1000),
             });
 
             console.log("Message saved in database", savedOutgoingMessage);
