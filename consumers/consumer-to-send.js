@@ -6,17 +6,27 @@ const consumerToSend = ({ rabbitMQChannel, GRAPH_API_TOKEN }) => {
         if (msg == null) return;
 
         const messageContent = JSON.parse(msg.content.toString());
+        const entries = messageContent.entry;
+        const { id: whatsapp_business_account_id, changes } = entries[0];
+        const change = changes[0];
+        const value = change.value;
+        const contacts = value.contacts;
+        const contact = contacts[0];
+        const { wa_id } = contact;
+        const { phone_number_id, display_phone_number } = value.metadata;
+        const content = messageContent.content;
+        const type = Object.keys(content)[0];
 
         try {
             const requestBody = {
-                to: messageContent.from,
-                type: messageContent.type,
-                ...messageContent.content,
+                type,
+                to: wa_id,
+                ...content,
                 messaging_product: "whatsapp",
             };
 
             const response = await axios.post(
-                `https://graph.facebook.com/v22.0/${messageContent.phone_number_id}/messages`,
+                `https://graph.facebook.com/v22.0/${phone_number_id}/messages`,
                 requestBody,
                 {
                     headers: {
@@ -30,9 +40,17 @@ const consumerToSend = ({ rabbitMQChannel, GRAPH_API_TOKEN }) => {
 
             const { id } = response.data.messages[0];
 
-            const savedOutgoingMessage = await saveOutgoingMessage({ ...messageContent, messageId: id });
+            const savedOutgoingMessage = await saveOutgoingMessage({
+                content,
+                from: wa_id,
+                messageId: id,
+                phone_number_id,
+                display_phone_number,
+                whatsapp_business_account_id,
+                timestamp: new Date().toISOString(),
+            });
 
-            console.log("Message saved in database");
+            console.log("Message saved in database", savedOutgoingMessage);
 
             rabbitMQChannel.ack(msg);
         } catch (error) {
